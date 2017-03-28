@@ -1,3 +1,5 @@
+'use strict'
+
 // WebSocketクライアント：GPMDPとの通信
 let WSC = require('websocket').client;
 const GPMDP_CLIENT_URL = 'ws://localhost:5672/';
