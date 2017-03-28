@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, Electron!</title>
+    <script>
+        const CORE = require('electron').remote.require('./core');
+        const GPMDP = require('electron').remote.require('./script/gpmdp-socket-api-connector');
+        const LYRICSEARCH = require('electron').remote.require('./script/j-lyric-lyricsearch');
+        const SHARE_TWITTER =  require('electron').remote.require('./script/share-twitter');
+
+        window.jQuery = window.$ = require('jquery');
+
+        let nowPlayingTrack = null;
+
+        // 再生情報の取得
+        setInterval(function() {
+            // GPMDP に接続
+            const g = new GPMDP();
+            g.connect();
+
+            // 再生曲情報を取得
+            nowPlayingTrack = g.getNowPlayingTrack();
+            if(nowPlayingTrack == null) return;
+
+            console.log(JSON.stringify(nowPlayingTrack));
+
+            // UIに反映
+            document.getElementById('albumArt').style.backgroundImage = 'url(\"' + nowPlayingTrack.albumArt + '\")';
+            document.getElementById('artistName').innerText = nowPlayingTrack.artist;
+            document.getElementById('trackName').innerText = nowPlayingTrack.title;
+            document.getElementById('albumName').innerText = nowPlayingTrack.album;
+        }, 1000);
+
+        // 拡張領域の表示の切り替えorトグル
+        // in) 拡張機能の名前または一意なキー
+        let nowDisplaying = 'none';
+        function toggleExtentionArea(extentionKey) {
+            // 異なる拡張機能を選択した場合
+            if(nowDisplaying != extentionKey) {
+                CORE.expandWindowSize();
+                nowDisplaying = extentionKey;
+
+                // 拡張領域を表示してクリア
+                $('.extention').show();
+                $('.extention').empty();
+            }
+            // 同じボタンを押したときは非表示
+            else {
+                $('.extention').hide();
+                CORE.resetWindowSize();
+
+                nowDisplaying = 'none';
+            }
+            return nowDisplaying;
+        }
+
+        $(function() {
+            $('#shareTwitter').on('click', function(event) {
+                const t = new SHARE_TWITTER();
+                
+                // アクセストークンがない場合はログインさせる
+                if(!t.checkAccessToken()) {
+                    const gotoLogin = window.confirm("Please login your twitter account, then try again.");
+
+                    if(gotoLogin) {
+                        t.getAccessToken();
+                    }
+
+                    //ここでは処理を終了する
+                    return;
+                }
+
+                // ツイートするテキスト本体
+                const tweetBody = '#nowplaying ' + nowPlayingTrack.title + ' by ' + nowPlayingTrack.artist + ' from [' + nowPlayingTrack.album + "]";
+
+                // ツイートする
+                // 拡張機能領域が非表示になる場合は処理しない
+                if(toggleExtentionArea("shareTwitter") == 'none') {
+                    return;
+                }
+
+                t.tweetPlainText(tweetBody, function(error, data, response) {
+                    if(error != null) {
+                        $('.extention').text("Failed to tweet.");
+                    }
+                    else {
+                        $('.extention').text("Tweet successful.");
+                    }
+                });
+            });
+
+            $('#closeWindow').on('click', function(event) {
+                CORE.exitApp();
+            });
+
+            // 歌詞を表示するボタン
+            $('#showLyric').on('click', function(event) {
+                // 拡張領域が非表示になるなら処理をしない
+                if(toggleExtentionArea("showLyric") == 'none') {
+                    return;
+                }
+                const lyricsearch = new LYRICSEARCH();
+
+                // 歌詞を取得
+                const lyric_text = lyricsearch.getLyricFromSongTitle(nowPlayingTrack.title, nowPlayingTrack.artist,
+                function(data) {
+                    console.log("Lyric: " + data);
+
+                    if(data != null) {
+                        // 先頭に改行コードを含む場合は削除
+                        if((data.charCodeAt(0) == 13) && (data.charCodeAt(1) == 10)) {
+                            data = data.substring(2, data.length);
+                        }
+                        data = data.replace(/\r?\n/g, '<br>');
+                        $('.extention').html(data);
+                    }
+                    else {
+                        $('.extention').text("Sorry, could not get song lyric.");
+                    }
+                });
+            });
+
+            // 設定ボタン
+            $('#config').on('click', function(event) {
+            // 拡張機能領域が非表示になる場合は処理しない
+            if(toggleExtentionArea("config") == 'none') {
+                return;
+            }
+
+                $('.extention').text("Sorry, this function is now implementing.");
+            });
+        });
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
+    <link rel="stylesheet" href="images/font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+      <span id="albumArt"></span>
+      <span class="trackInfo">
+          <div class="trackContainer">
+          <p id="artistName">Artist Name</p>
+          <p id="trackName">Track</p>
+          <p id="albumName">Album Name</p>
+        </div>
+      </span>
+      <div class="control">
+        <a class="button" id="shareTwitter" title="Share on Twitter"><i class="fa fa-twitter fa-lg"></i></a>
+        <a class="button" id="showLyric" title="Show lyrics"><i class="fa fa-sticky-note fa-lg"></i></a>
+        <a class="button" id="config" title="Configurations"><i class="fa fa-wrench fa-lg"></i></a>
+        <a class="button" id="closeWindow" title="Exit app"><i class="fa fa-close fa-lg"></i></a>
+    </div>
+
+      <div class="extention">
+          Here is Extention area.
+      </div>
+  </body>
+
+</html>

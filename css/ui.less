@@ -1,0 +1,125 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+@defaultWindowWidth: 300px;
+@defaultWindowHeight: 150px;
+@defaultTrackInfoHeight: 100px;
+@defaultToolbarHeight: 20px;
+@defaultExtentionHeight: 30px;
+
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 8pt;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    font-family: "Noto Sans Japanese";
+}
+
+#albumArt {
+    margin: 0;
+    padding: 0;
+    display: table-cell;
+    width: @defaultTrackInfoHeight;
+    height: @defaultTrackInfoHeight;
+    background-size: cover;
+    background-image: none;
+}
+
+.trackInfo {
+    margin: 0 auto;
+    display: table-cell;
+    width: @defaultWindowWidth - @defaultTrackInfoHeight;
+    height: @defaultTrackInfoHeight;
+
+    .trackContainer {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
+
+        p {
+            margin: 0px;
+        }
+    }
+}
+
+.control {
+    margin: 0;
+    padding: 0;
+    display: table;
+    width: @defaultWindowWidth;
+    height: @defaultToolbarHeight;
+
+    .button {
+        margin: 0 0 0 0;
+        padding: 0;
+
+        display: table-cell;
+        text-decoration: none;
+        text-align: center;
+        font-size: 12px;
+
+        width: 25%;
+        height: 100%;
+
+        transition: background-color 0.25s linear 0s , color 0.25s linear 0s;
+        cursor: pointer !important;
+    }
+    .button:hover {
+        cursor: pointer !important;
+    }
+
+    #closeWindow {
+        //border-color: #EF5350;
+        background-color: #EF5350;
+        color: #FFF;
+    }
+    #closeWindow:hover {
+        background-color: #FFF;
+        color: #EF5350;
+    }
+    #shareTwitter {
+        background-color: #42A5F5;
+        color: #FFF;
+    }
+    #shareTwitter:hover {
+        background-color: #FFF;
+        color: #42A5F5;
+    }
+    #showLyric {
+        background-color: #66BB6A;
+        color: #FFF;
+    }
+    #showLyric:hover {
+        background-color: #FFF;
+        color: #66BB6A;
+    }
+    #config {
+        background-color:#FFCA28;
+        color: #FFF;
+    }
+    #config:hover {
+        background-color: #FFF;
+        color:#FFCA28;
+    }
+}
+
+.extention {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    display: none;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: @defaultWindowWidth;
+    height: @defaultExtentionHeight;
+}

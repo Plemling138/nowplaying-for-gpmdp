@@ -1,0 +1,104 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+html {
+  width: 100%;
+  height: 100%;
+  font-size: 8pt;
+}
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  font-family: "Noto Sans Japanese";
+}
+#albumArt {
+  margin: 0;
+  padding: 0;
+  display: table-cell;
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-image: none;
+}
+.trackInfo {
+  margin: 0 auto;
+  display: table-cell;
+  width: 200px;
+  height: 100px;
+}
+.trackInfo .trackContainer {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+.trackInfo .trackContainer p {
+  margin: 0px;
+}
+.control {
+  margin: 0;
+  padding: 0;
+  display: table;
+  width: 300px;
+  height: 20px;
+}
+.control .button {
+  margin: 0 0 0 0;
+  padding: 0;
+  display: table-cell;
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  width: 25%;
+  height: 100%;
+  transition: background-color 0.25s linear 0s, color 0.25s linear 0s;
+  cursor: pointer !important;
+}
+.control .button:hover {
+  cursor: pointer !important;
+}
+.control #closeWindow {
+  background-color: #EF5350;
+  color: #FFF;
+}
+.control #closeWindow:hover {
+  background-color: #FFF;
+  color: #EF5350;
+}
+.control #shareTwitter {
+  background-color: #42A5F5;
+  color: #FFF;
+}
+.control #shareTwitter:hover {
+  background-color: #FFF;
+  color: #42A5F5;
+}
+.control #showLyric {
+  background-color: #66BB6A;
+  color: #FFF;
+}
+.control #showLyric:hover {
+  background-color: #FFF;
+  color: #66BB6A;
+}
+.control #config {
+  background-color: #FFCA28;
+  color: #FFF;
+}
+.control #config:hover {
+  background-color: #FFF;
+  color: #FFCA28;
+}
+.extention {
+  margin: 0;
+  padding: 0;
+  clear: both;
+  display: none;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 300px;
+  height: 30px;
+}
