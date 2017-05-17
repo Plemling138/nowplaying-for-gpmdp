@@ -21,7 +21,7 @@ JLyricSearch.prototype.getLyricFromSongTitle = function(songTitle, songArtist, c
     let lyric_info = null;
     JLyricSearch.prototype.searchLyricURLs(songTitle, songArtist)
     .then(function(data) {
-        // console.log(data[0]);
+        console.log(data[0]);
         lyric_info = data[0];
 
         // 検索できなければnullを返して終了（この書き方じゃないよな）
@@ -69,11 +69,11 @@ JLyricSearch.prototype.searchLyricURLs = function (songTitle, songArtist) {
             }
 
             // 曲名、歌手名とURLのリストを作成
-            $('div[id=lyricList] > .body').each(function(index, element) {
+            $('div[id=bas] > div[id=cnt] > div[id=mnb] > div[class=bdy]').each(function(index, element) {
                 songInfoAndURL.push({
-                    title : $(this).children('.title').children('a').text(),
-                    artist : $(this).children('.status').children('a').text(),
-                    url : $(this).children('.title').children('a').attr('href')
+                    title : $(this).children('.mid').children('a').text(),
+                    artist : $(this).children('.sml').children('a').text(),
+                    url : $(this).children('.mid').children('a').attr('href')
                 });
             });
 
@@ -97,7 +97,7 @@ JLyricSearch.prototype.getLyricFromURL = function(TargetURL) {
             }
 
             // p要素から歌詞の本文を取得
-            const songLyricBody = $('p[id=lyricBody]').text();
+            const songLyricBody = $('p[id=Lyric]').html();
             resolve(songLyricBody);
         });
     });

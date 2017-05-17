@@ -58,7 +58,7 @@
         $(function() {
             $('#shareTwitter').on('click', function(event) {
                 const t = new SHARE_TWITTER();
-                
+
                 // アクセストークンがない場合はログインさせる
                 if(!t.checkAccessToken()) {
                     const gotoLogin = window.confirm("Please login your twitter account, then try again.");
@@ -112,7 +112,7 @@
                         if((data.charCodeAt(0) == 13) && (data.charCodeAt(1) == 10)) {
                             data = data.substring(2, data.length);
                         }
-                        data = data.replace(/\r?\n/g, '<br>');
+                        data = data.replace("\"", "");
                         $('.extention').html(data);
                     }
                     else {
